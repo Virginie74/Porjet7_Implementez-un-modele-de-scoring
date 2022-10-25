@@ -6,56 +6,44 @@ Created on Tue Oct  4 11:27:26 2022
 """
 
 # Library imports
-import uvicorn
-from fastapi import FastAPI, HTTPException
-from lime.lime_tabular import LimeTabularExplainer
-from sklearn.preprocessing import LabelEncoder
+from fastapi import FastAPI
+import joblib
 import pandas as pd
-from starlette.responses import JSONResponse
+from sklearn.neighbors import NearestNeighbors
 import json
-from api_functions import (Customers,
-                           CreditModel,
-                           entrainement_knn)
 
 
 # Create the app object
 app = FastAPI()
 
 
-# Import the model
-model = CreditModel()
+def predict_target(data_customer, model):
+    """
+    Method use to make a prediction from input parameters.
+    The method retruns the prediction and the prediction probability
+    """
+    X_prepared = data_customer
+    model = model
+    pred_score = model.predict(X_prepared)
+    pred_proba = model.predict_proba(X_prepared)
 
+    return pred_score, pred_proba
+
+
+def entrainement_knn(df):
+
+    print("En cours...")
+    knn = NearestNeighbors(n_neighbors=10, algorithm='auto').fit(df)
+
+    return knn
 
 # Index route
+
+
 @app.get('/')
 def index():
     """Function to define the homepage message of the API"""
     return {'message': 'Bienvenue sur l API pret a depenser!'}
-
-
-@app.get('/customers')
-async def get_customers():
-    """Function to get a list of the all the customer ids"""
-    customer_ids = Customers.get_customer_ids()
-    if len(customer_ids) == 0:
-        raise HTTPException(status_code=418, detail="Something went wrong\
-                            ...No customer in the database")
-    return {"customer_id possible": [customer_ids]}
-
-
-@app.get('/customers/{cutomer_id}')
-async def check_customer(customer_id: int):
-    """function to verify the presence of an id customer in the dataframe"""
-    customer_ids = Customers.get_customer_ids()
-    if customer_id not in customer_ids:
-        raise HTTPException(status_code=404, detail="Customer ID not found")
-    return {"customer_id": [customer_id]}
-
-
-async def load_data():
-    """Function to load the dataframe containing preprocessed data"""
-    full_data = pd.read_csv("df_sampled.csv")
-    return full_data
 
 
 @app.get('/predict/{customer_id}')
@@ -63,9 +51,10 @@ async def predict(customer_id: int):
     """Function to calculate prediction score and probability for a specific customer"""
 
     X_all_scaled = pd.read_csv("X_prepared_sampled.csv")
+    model = joblib.load('model_credit.joblib')
     data_customer = X_all_scaled.loc[X_all_scaled["SK_ID_CURR"] == customer_id]
     data_customer = data_customer.drop(columns=["SK_ID_CURR"], axis=1)
-    pred_score, pred_proba, X_prepared = model.predict_target(data_customer)
+    pred_score, pred_proba = predict_target(data_customer, model)
     pred_proba = pred_proba[0]
     results = {'pred_score': pred_score[0],
                'pred_proba': pred_proba[1]}
