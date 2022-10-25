@@ -90,7 +90,7 @@ def load_data_customer_prepared(customer_id):
 
 @st.cache
 def get_prediction(customer_id):
-    api_url = "https://app-myfastapi.herokuapp.com/predict/" + str(customer_id)
+    api_url = 'https://app-myfastapi.herokuapp.com/predict/' + str(customer_id)
     response = requests.get(url=api_url)
     API_data = response.json()
     print('API_DATA', API_data)
