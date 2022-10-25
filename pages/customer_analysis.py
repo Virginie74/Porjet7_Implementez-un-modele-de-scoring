@@ -226,7 +226,7 @@ def load_data_customer_prepared(customer_id):
 
 @st.cache
 def get_prediction(customer_id):
-    api_url = "http://127.0.0.1:8000/predict/" + str(customer_id)
+    api_url = 'https://app-myfastapi.herokuapp.com/predict/' + str(customer_id)
     response = requests.get(url=api_url)
     API_data = response.json()
     print('API_DATA', API_data)
@@ -235,7 +235,7 @@ def get_prediction(customer_id):
 
 @st.cache
 def get_neighbors(customer_id):
-    api_url = "http://127.0.0.1:8000/load_voisins/" + str(customer_id)
+    api_url = 'https://app-myfastapi.herokuapp.com/predict/' + str(customer_id)
     response = requests.get(url=api_url)
     API_knn = response.json()
     print('API_DATA', API_knn)
