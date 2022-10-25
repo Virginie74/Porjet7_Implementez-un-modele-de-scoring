@@ -6,6 +6,7 @@ import requests
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import joblib
+import shap
 from math import pi
 import os.path
 import sys
