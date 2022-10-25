@@ -1,4 +1,4 @@
-import os
+import osAPI
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -236,7 +236,8 @@ def get_prediction(customer_id):
 
 @st.cache
 def get_neighbors(customer_id):
-    api_url = 'https://app-myfastapi.herokuapp.com/predict/' + str(customer_id)
+    api_url = 'https://app-myfastapi.herokuapp.com/load_voisins/' + \
+        str(customer_id)
     response = requests.get(url=api_url)
     API_knn = response.json()
     print('API_DATA', API_knn)
@@ -475,6 +476,8 @@ if (show_client_comparison):
     st.markdown("Principales données")
 
     # Prepare data for radar plot
+    X_prepared_id = load_data_customer_prepared(customer_id)
+    X_prepared_id = X_prepared_id.drop(columns=["SK_ID_CURR"], axis=1)
     data_french_id = rename_columns(X_prepared_id)
     data_french = rename_columns(X_prepared_all)
     df_MM = data_french_id[["Age", "Montant des annuités", "Durée du crédit",
