@@ -17,6 +17,7 @@ from api_functions import (Customers,
                            CreditModel,
                            entrainement_knn)
 
+
 # Create the app object
 app = FastAPI()
 
