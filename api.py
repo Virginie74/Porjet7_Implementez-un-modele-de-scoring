@@ -11,6 +11,7 @@ import joblib
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 import json
+from lightgbm import LGBMClassifier
 
 
 # Create the app object
