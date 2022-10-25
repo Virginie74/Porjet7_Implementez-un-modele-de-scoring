@@ -4,27 +4,62 @@ Created on Wed Oct  5 16:47:20 2022
 
 @author: virgi
 """
-import os
-import json
 import streamlit as st
-import streamlit.components.v1 as components
 import pandas as pd
-import numpy as np
 import requests
-import plotly.graph_objects as go
-import shap
 import matplotlib.pyplot as plt
 import joblib
 from math import pi
-from dashboard_functions import (plot_radar,
-                                 rename_columns,
-                                 histo_failure,
-                                 boxplot_for_num_feature)
 
 
-API_URL = 'http://127.0.0.1:8000/'
+#API_URL = 'http://127.0.0.1:8000/'
+API_URL = 'https://app-myfastapi.herokuapp.com/'
 LOGO_IMAGE = "logo.png"
 IMAGE_SHAPE = ("summary_plot_shap.png")
+
+
+#####################################################
+#########################################
+# Define specific functions
+#########################################
+def rename_columns(df):
+    new_name_cols = {
+        'CODE_GENDER': "Genre",
+        'DAYS_BIRTH': "Age",
+        'NAME_FAMILY_STATUS': "Situation familiale",
+        'CNT_CHILDREN': "Nombre d'enfants",
+        'NAME_EDUCATION_TYPE': "Niveau d'étude",
+        'AMT_INCOME_TOTAL': "Revenu annuel",
+        'NAME_CONTRACT_TYPE': "Type de crédit demandé",
+        'AMT_CREDIT': "Montant du crédit",
+        'ANNUITY_INCOME_PERCENT': "Taux d'endettement estimé",
+        'AMT_ANNUITY': "Montant des annuités",
+        'OCCUPATION_TYPE': "Situation professionelle",
+        'DAYS_EMPLOYED': "Ancienneté dans l'entreprise",
+        'NAME_INCOME_TYPE': "Type de revenu",
+        'EXT_SOURCE_2': "Score du client d'après SOURCE 2",
+        'EXT_SOURCE_3': "Score du client d'après SOURCE 3",
+        'FLAG_OWN_CAR': "Propriétaire d'un véhicle",
+        'FLAG_OWN_REALTY': "Propriétaire d'un logement principales",
+        'CREDIT_TERM': "Durée du crédit",
+        'DAYS_INSTALMENT_delay': "Délai de remboursement de crédit précédent",
+        'DAYS_INSTALMENT_delta': "Delta entre sommes percues et du de crédit précédent",
+        'SUM_OF_CURRENT_CREDIT': "Montant des crédits en cours",
+        'AMT_GOODS_PRICE': "Montant de l'achat",
+        'NB_APPROVED_APP_previous': "Nb de demandes approuvées",
+        'NB_REFUSED_APP_previous': "Nb de demandes refusées",
+        'REGION_RATING_CLIENT_W_CITY': "Zone d'habitation (commune)",
+        'NAME_EDUCATION_TYPE_Higher_education': "Niveau d'éducation universitaire",
+        'AMT_REQ_CREDIT_BUREAU_QRT': "Nb de demandes de renseignements",
+        'DAYS_LAST_PHONE_CHANGE': "Ancienneté du téléphone (en jours)",
+        'OCCUPATION_TYPE_Core_staff': "Activité professionnelle (Personnel clé)",
+        'ORGANIZATION_TYPE_School': "Secteur professionel (école)",
+        'NB_CLOSED_CREDIT_bureau': "Nb de crédits terminés",
+        'NB_ACTIVE_CREDIT_bureau': "Nb de crédits en cours"}
+    df.rename(columns=new_name_cols, inplace=True)
+    return df
+
+############################################
 
 
 @st.cache
@@ -55,7 +90,7 @@ def load_data_customer_prepared(customer_id):
 
 @st.cache
 def get_prediction(customer_id):
-    api_url = "http://127.0.0.1:8000/predict/" + str(customer_id)
+    api_url = "https://app-myfastapi.herokuapp.com/predict/" + str(customer_id)
     response = requests.get(url=api_url)
     API_data = response.json()
     print('API_DATA', API_data)
@@ -64,7 +99,8 @@ def get_prediction(customer_id):
 
 @st.cache
 def get_neighbors(customer_id):
-    api_url = "http://127.0.0.1:8000/load_voisins/" + str(customer_id)
+    api_url = "https://app-myfastapi.herokuapp.com/load_voisins/" + \
+        str(customer_id)
     response = requests.get(url=api_url)
     API_knn = response.json()
     print('API_DATA', API_knn)
