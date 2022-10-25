@@ -21,8 +21,6 @@ from api_functions import (Customers,
 app = FastAPI()
 
 
-path = 'C:/Users/virgi/OneDrive/Desktop/Projet7_github/Data_dashboard/'
-
 # Import the model
 model = CreditModel()
 
@@ -55,7 +53,7 @@ async def check_customer(customer_id: int):
 
 async def load_data():
     """Function to load the dataframe containing preprocessed data"""
-    full_data = pd.read_csv(path + "df_sampled.csv")
+    full_data = pd.read_csv("df_sampled.csv")
     return full_data
 
 
@@ -63,7 +61,7 @@ async def load_data():
 async def predict(customer_id: int):
     """Function to calculate prediction score and probability for a specific customer"""
 
-    X_all_scaled = pd.read_csv(path + "X_prepared_sampled.csv")
+    X_all_scaled = pd.read_csv("X_prepared_sampled.csv")
     data_customer = X_all_scaled.loc[X_all_scaled["SK_ID_CURR"] == customer_id]
     data_customer = data_customer.drop(columns=["SK_ID_CURR"], axis=1)
     pred_score, pred_proba, X_prepared = model.predict_target(data_customer)
@@ -76,7 +74,7 @@ async def predict(customer_id: int):
 
 @app.get('/load_voisins/{customer_id}')
 async def load_voisins(customer_id: int):
-    X_all_scaled = pd.read_csv(path + "X_prepared_sampled.csv")
+    X_all_scaled = pd.read_csv("X_prepared_sampled.csv")
     X_all_scaled_prepared = X_all_scaled.drop(columns=["SK_ID_CURR"], axis=1)
     data_customer = X_all_scaled.loc[X_all_scaled["SK_ID_CURR"] == customer_id]
     data_customer = data_customer.drop(columns=["SK_ID_CURR"], axis=1)

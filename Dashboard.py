@@ -23,7 +23,6 @@ from dashboard_functions import (plot_radar,
 
 
 API_URL = 'http://127.0.0.1:8000/'
-path = 'C:/Users/virgi/OneDrive/Desktop/Projet7_github/Data_dashboard/'
 LOGO_IMAGE = "logo.png"
 IMAGE_SHAPE = ("summary_plot_shap.png")
 
@@ -31,7 +30,7 @@ IMAGE_SHAPE = ("summary_plot_shap.png")
 @st.cache
 def load_data():
     """Function to load the dataframe containing preprocessed data"""
-    data = pd.read_csv(path + "data_sampled.csv")
+    data = pd.read_csv("data_sampled.csv")
     data = data.dropna(axis=0)
     data = data.sample(n=10000)
     return data
@@ -48,7 +47,7 @@ def load_info_customer(customer_id):
 @st.cache
 def load_data_customer_prepared(customer_id):
     """Function to obtain the encoded and normalized data of a unique customer based on its id"""
-    X_prepared_all = pd.read_csv(path + "X_prepared_sampled.csv")
+    X_prepared_all = pd.read_csv("X_prepared_sampled.csv")
     X_prepared_id = X_prepared_all.loc[X_prepared_all["SK_ID_CURR"] == customer_id]
 
     return X_prepared_id
@@ -74,7 +73,7 @@ def get_neighbors(customer_id):
 
 @st.cache
 def get_shap_values(X_prepared):
-    explainer = joblib.load(path + "shap_explainer.joblib")
+    explainer = joblib.load("shap_explainer.joblib")
     shap_values = explainer.shap_values(X_prepared)
     return shap_values
 
