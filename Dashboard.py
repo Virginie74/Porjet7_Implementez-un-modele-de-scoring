@@ -147,18 +147,17 @@ def main():
     with st.expander(label="🤔 A quoi sert cette application ?"):
         st.write("Ce dashboard interactif de **Prêt à dépenser**\
                  permet de comprendre et interpréter les décisions d'octroi de prêt.\
-                 Ces décisions sont la résultante d'une prédictions faites\
+                 Ces décisions sont la résultante d'une prédiction faite\
                  par un modèle d'apprentissage à partir des données de clients précédents")
         st.text('\n')
-        st.write("**Objectif**:  répondre au soucis de transparence vis-à-vis\
-                 des décisions d’octroi de crédit qui va tout à fait\
-                 dans le sens des valeurs que l’entreprise veut incarner")
+        st.write("**Objectif**:  être le plus transparent possible vis-à-vis\
+                 des décisions d’octroi de crédit")
 
-    with st.expander(label="🤔 Quels sont les données les plus importantes pour l'octroie d'un crédit ?"):
-        st.write("L'octroie d'un crédit à un client est dans un premier temps accordé\
-                  via l'utilisation d'un modèle de machine learning de type Light GBM")
+    with st.expander(label="🤔 Quels sont les données les plus importantes pour l'octroi d'un crédit ?"):
+        st.write("L'octroi d'un crédit à un client est dans un premier temps accordé\
+                  via l'utilisation d'un modèle de machine learning de type Light GBM qui détermine la probabilité que le client rembourse la somme demandée")
         st.text('\n')
-        st.write("Pour le modèle, les informations principales utilisées par le modèle sont représentées dans le graphique ci-dessous")
+        st.write("De manière global, les informations principales utilisées par le modèle sont représentées dans le graphique ci-dessous")
         st.image(IMAGE_SHAPE)
 
 
